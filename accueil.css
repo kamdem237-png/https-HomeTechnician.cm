@@ -1,0 +1,81 @@
+/* Variables CSS pour les couleurs personnalisées si besoin */
+:root {
+    --bs-primary: #007bff; /* Redéfinition de la couleur primaire de Bootstrap si nécessaire */
+    --bs-success: #28a745; /* Redéfinition de la couleur succès de Bootstrap */
+    --bs-dark: #212529;
+    --bs-light: #f8f9fa;
+}
+
+/* Styles généraux */
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+/* Ajustements pour la Hero Section (sur la page d'accueil) */
+.hero-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+}
+
+.hero-section .display-3 {
+    font-size: calc(1.75rem + 2.5vw);
+}
+
+/* Ajustements pour les cartes "Comment ça marche" */
+.how-it-works-section .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.how-it-works-section .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.how-it-works-section .card i {
+    color: var(--bs-primary);
+}
+
+/* Styles pour les cartes de catégorie */
+.category-card {
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    min-height: 120px;
+    text-decoration: none;
+    color: var(--bs-dark);
+}
+
+.category-card i {
+    color: var(--bs-primary);
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    background-color: var(--bs-primary);
+    color: var(--bs-light);
+}
+
+.category-card:hover i {
+    color: var(--bs-light);
+}
+
+/* Ajustements pour la section Témoignages */
+.testimonials-section .card {
+    border-left: 5px solid var(--bs-primary);
+}
+
+/* Styles spécifiques à la page À Propos de Nous */
+
+/* Style pour les images de l'équipe */
+.team-member .card-img-top {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 5px solid var(--bs-primary); /* Bordure pour les photos de profil */
+}
+
+/* Ajustement pour les icônes de valeurs */
+.card i.fa-4x {
+    font-size: 3.5rem; /* Ajustement légèrement la taille si 4x est trop grand */
+}
+
+/* Si vous avez des sections très spécifiques, ajoutez-les ici */

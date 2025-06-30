@@ -1,0 +1,132 @@
+.div1{
+    margin-top: -10px;
+    background-image: url(acc.jpg);
+    background-size: cover;
+    padding: 60px;
+    text-align: center;
+}/*page d'accueil*/
+
+
+.div1A{
+    margin-top: -10px;
+    background-image: url(moi.jpg);
+    background-size: cover;
+    padding: 60px;
+    text-align: center;
+}/*page d'A propos*/
+
+.div1B{
+    margin-top: -10px;
+    background-image: url(cinq.jpeg);
+    background-size: cover;
+    padding: 60px;
+    text-align: center;
+}/*pabe nos services*/
+.div1C{
+    margin-top: -10px;
+    background-image: url(interface.jpg);
+    background-size: cover;
+    padding: 60px;
+    text-align: center;
+}/*pabe contact*/
+
+.button[type="button"]{
+  
+    padding: 10px ;
+    background-color:  rgb(123, 205, 0);
+    border-radius: 9px;
+}
+.button[type="button"]:hover{
+    padding: 10px ;
+    background-color:  greenyellow;
+    border-radius: 9px;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+.pre{
+    margin-top: 85px;
+}/*page a propos*/
+.img1{
+    margin-bottom: 15px;
+}
+.inter{
+    margin-bottom: 15px;
+
+}
+nav{
+    margin-top: -10px;
+}
+li{
+    margin-top: -10px;
+}
+.gt1{
+    color: white;
+    line-height: 80px;
+    margin-bottom: 50px;
+    text-align: center;
+    letter-spacing: 3px;
+}
+p{
+    letter-spacing: 2px;
+    line-height: 50px;
+    font-size: 17px;
+}/*page d'accueil*/
+
+#specialite{
+    width: 300px;
+    height: 40px;
+    border-radius: 5px;
+
+  }
+  .zone{
+    width: 300px;
+    height: 40px;
+    margin-top: 0px;
+    border-radius: 5px;
+  }
+  .email{
+    width:  350px;
+    margin-top: 20px;
+    border-radius: 5px;
+  }
+  input[type="submit"]{
+    padding: 10px ;
+    background-color:  rgb(123, 205, 0);
+    border-radius: 9px;
+    margin-top: 20px;
+}
+input[type="submit"]:hover{
+  padding: 10px ;
+    background-color:  greenyellow;
+    border-radius: 9px;
+    margin-top: 20px;
+}
+.section_accueil{
+    margin-top: 50px;
+    text-align: center;
+}
+
+.conn1{
+    border: 1px solid #ccc;
+    background-color: #ccc;
+    width:300px;
+    border-radius: 15px;
+}
+
+.conn2{
+    margin-top: 50px;
+    border: 1px solid #ccc;
+    background-color: #ccc;
+    width:350px;
+    border-radius: 15px;
+}
+.connect{
+    border: 1px solid rgb(211, 214, 217);
+    text-align: center;
+    width: 500px;
+    background-color: rgba(97, 176, 255, 0.959);
+}
+
+/*connexion*/

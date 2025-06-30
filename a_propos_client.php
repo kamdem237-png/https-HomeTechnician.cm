@@ -1,0 +1,473 @@
+<?php
+session_start();
+
+// --- Configuration de la base de données ---
+$server_name = "localhost";
+$user_name = "root";
+$psw = ""; // Your MySQL password (leave empty if none)
+$DB_name = "depanage"; // Your database name
+
+// Establish database connection
+$con = new mysqli($server_name, $user_name, $psw, $DB_name);
+
+// Check connection
+if ($con->connect_error) {
+    // Log the error for debugging, but show a user-friendly message
+    error_log("Database connection error: " . $con->connect_error);
+    die("Désolé, une erreur technique est survenue. Veuillez réessayer plus tard.");
+}
+
+// Set character set to avoid encoding issues
+$con->set_charset("utf8mb4");
+
+// --- Technician Authentication Check ---
+// Redirect if the user is not logged in or is not a technician
+if (!isset($_SESSION['user']) || ($_SESSION['role'] ?? '') !== 'client') {
+    header("Location: connexion_client.php"); // Ensure this path is correct
+    exit();
+}
+
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À Propos de Nous - VotreSite</title>
+    <link rel="icon" type="image/png" href="mon_logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link rel="stylesheet" href="css/style.css"> 
+    <link rel="stylesheet" href="css/forms.css"> 
+
+    <style>
+        /* Styles personnalisés pour cette page (copiés de accueil.html et ajustés) */
+        :root {
+            --bs-primary: #007bff; /* Bleu Bootstrap par défaut */
+            --bs-secondary: #6c757d; /* Gris secondaire */
+            --bs-success: #28a745;
+            --bs-info: #17a2b8; /* Ajouté pour l'exemple Innovation */
+            --bs-warning: #ffc107; /* Ajouté pour l'exemple Communauté */
+            --bs-danger: #dc3545; /* Ajouté pour l'exemple Excellence */
+            --bs-dark: #343a40;
+            --bs-light: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background-color: var(--bs-light);
+            /* Ajout du padding-top pour compenser la navbar fixe, comme dans accueil.html */
+            padding-top: 76px; 
+        }
+
+        /* Navbar améliorée (copiée de accueil.html) */
+        .navbar {
+            background-color: var(--bs-dark) !important; /* Fond sombre */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: fixed; /* Rend la navbar fixe en haut */
+            top: 0;
+            width: 100%;
+            z-index: 1030;
+        }
+
+        .navbar-brand {
+            padding: 0; /* Supprime le padding par défaut pour l'image */
+        }
+
+        .navbar-brand img {
+            max-width: 200px; /* Taille plus raisonnable pour un logo */
+            height: auto;
+            border-radius: 8px; /* Adoucissement des coins */
+            object-fit: contain; /* Assure que le logo entier est visible */
+        }
+
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.75) !important; /* Couleur de texte claire */
+            font-weight: 500;
+            margin-right: 15px; /* Espacement entre les liens */
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--bs-primary) !important; /* Couleur primaire au survol/actif (bleu) */
+        }
+
+        .btn-dark {
+            background-color: var(--bs-primary); /* Bouton primaire pour se connecter */
+            border-color: var(--bs-primary);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .btn-dark:hover {
+            background-color: #0056b3; /* Teinte plus foncée au survol */
+            border-color: #0056b3;
+        }
+
+        /* Styles généraux des sections et titres (conservés de a_propos.html, ajustés si nécessaire) */
+        section {
+            padding: 4rem 0;
+        }
+
+        h2.display-5 { /* Style pour les titres H2 des sections */
+            font-weight: 700;
+            color: var(--bs-dark); /* Couleur par défaut pour les titres de section */
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 10px;
+            text-align: center; /* Centrer tous les titres de section */
+        }
+
+        h2.display-5::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--bs-primary);
+            border-radius: 2px;
+        }
+
+        /* Pour les titres spécifiques qui ont déjà une couleur (Mission, Vision) */
+        h2.display-5.text-primary::after,
+        h2.display-5.text-success::after {
+            background-color: currentColor; /* Utilisez la couleur du texte */
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Ombre plus prononcée */
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Spécifique à la section équipe */
+        .team-member img {
+            width: 150px; 
+            height: 150px;
+            object-fit: cover;
+            border: 5px solid var(--bs-light); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .team-member .social-links a {
+            font-size: 1.25rem;
+            transition: color 0.3s ease;
+        }
+
+        .team-member .social-links a:hover {
+            color: var(--bs-dark) !important;
+        }
+
+        /* Footer (ajusté pour la couleur des icônes sociales au survol) */
+        .footer {
+            background-color: var(--bs-dark) !important;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer h3 {
+            color: white;
+            font-weight: 600;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.6);
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .footer .social-links a {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.5rem;
+            margin-right: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-links a:hover {
+            color: var(--bs-primary); /* BLEU pour les icônes sociales au survol, cohérent avec la navbar */
+        }
+
+    </style>
+</head>
+<body>
+
+   <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="site de mise en relation techniciens&clients.html">
+                    <img src="mon logo 3.png" alt="HomeTechnician Logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavClient" aria-controls="navbarNavClient" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavClient">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" aria-current="page" href="client.php">Accueil</a></li>
+                        <li class="nav-item"><a class="nav-link" href="mon_compte_client.php">Mon compte</a></li>
+                        <li class="nav-item"><a class="nav-link" href="missions_clientes.php">Missions</a></li>
+                        <li class="nav-item"><a class="nav-link" href="soumettre_probleme.php">Soumettre une Mission</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#techniciens">je suis un technicien</a></li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout.php">
+                                <button type="button" class="btn btn-primary"><i class="fas fa-sign-out-alt me-1"></i> Déconnexion</button>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="bg-primary text-white text-center py-5">
+        <div class="container py-4">
+            <h1 class="display-4 fw-bold mb-3">Notre Histoire : Connecter l'Expertise à Vos Besoins</h1>
+            <p class="lead">Découvrez qui nous sommes, notre mission et les valeurs qui nous animent au quotidien.</p>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-5 mb-4 mb-md-0">
+                    <img src="notre.jpg" class="img-fluid rounded shadow-lg" alt="Notre équipe au travail">
+                </div>
+                <div class="col-md-7">
+                    <h2 class="display-5 fw-bold mb-4 text-start">Qui est HomeTechnician ?</h2>
+                    <p class="fs-5 text-muted">
+                        Lancé en 2024, HomeTechnician est né d'un constat simple : il est souvent difficile pour les particuliers et les entreprises de trouver rapidement un technicien qualifié et fiable, tout comme il est complexe pour les techniciens indépendants d'élargir leur clientèle.
+                    </p>
+                    <p class="fs-5 text-muted">
+                        Nous avons créé une plateforme intuitive et sécurisée qui **met en relation directe** les besoins des clients avec les compétences des professionnels. Que ce soit pour une réparation d'urgence, une installation complexe ou une maintenance préventive, VotreSite est votre partenaire de confiance.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <h2 class="display-5 fw-bold mb-4 text-primary text-start">Notre Mission</h2>
+                    <p class="fs-5 text-muted">
+                        Notre mission est de **simplifier l'accès à des services techniques de qualité** en créant une communauté fiable où clients et techniciens peuvent interagir en toute confiance. Nous nous engageons à offrir une expérience transparente, efficace et sécurisée pour tous.
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h2 class="display-5 fw-bold mb-4 text-success text-start">Notre Vision</h2>
+                    <p class="fs-5 text-muted">
+                        Nous aspirons à devenir la **plateforme de référence** pour tous les services techniques au Cameroun, en favorisant l'économie locale et en donnant aux techniciens les moyens de développer leur activité, tout en garantissant aux clients un accès inégalé à l'expertise.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container text-center">
+            <h2 class="display-5 fw-bold mb-5">Nos Valeurs Fondamentales</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-4">
+                    <div class="card h-100 p-4 shadow-sm border-0">
+                        <i class="fas fa-handshake fa-4x text-primary mb-3"></i>
+                        <h3 class="h4 fw-bold mb-2">Confiance</h3>
+                        <p class="text-muted">Nous bâtissons des relations basées sur l'honnêteté, la transparence et l'intégrité.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 p-4 shadow-sm border-0">
+                        <i class="fas fa-shield-alt fa-4x text-success mb-3"></i>
+                        <h3 class="h4 fw-bold mb-2">Qualité</h3>
+                        <p class="text-muted">Nous nous engageons à connecter nos utilisateurs avec les meilleurs professionnels.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 p-4 shadow-sm border-0">
+                        <i class="fas fa-lightbulb fa-4x text-info mb-3"></i>
+                        <h3 class="h4 fw-bold mb-2">Innovation</h3>
+                        <p class="text-muted">Nous cherchons constamment à améliorer notre plateforme pour une expérience optimale.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 p-4 shadow-sm border-0">
+                        <i class="fas fa-users fa-4x text-warning mb-3"></i>
+                        <h3 class="h4 fw-bold mb-2">Communauté</h3>
+                        <p class="text-muted">Nous cultivons un écosystème de soutien pour clients et techniciens.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 p-4 shadow-sm border-0">
+                        <i class="fas fa-gem fa-4x text-danger mb-3"></i>
+                        <h3 class="h4 fw-bold mb-2">Excellence</h3>
+                        <p class="text-muted">Nous visons l'excellence dans chaque interaction et service rendu.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-white">
+        <div class="container text-center">
+            <h2 class="display-5 fw-bold mb-5">Rencontrez Notre Équipe</h2>
+            <div class="row justify-content-center g-4">
+                <div class="col-md-4 col-lg-3">
+                    <div class="card h-100 shadow-sm border-0 team-member">
+                        <img src="https://via.placeholder.com/200x200?text=Membre+1" class="card-img-top rounded-circle mx-auto mt-3" alt="Photo de l'équipe">
+                        <div class="card-body">
+                            <h4 class="card-title fw-bold mb-1">Kamdem Wabo Andrel Dela Werta</h4>
+                            <p class="card-subtitle text-primary mb-2">CEO & Fondateur</p>
+                            <p class="card-text text-muted">Passionnée par la technologie et l'entrepreneuriat, Kamdem a créé HomeTechnician pour combler un manque.</p>
+                            <div class="social-links mt-3">
+                                <a href="#" class="text-primary me-2"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-primary"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <div class="card h-100 shadow-sm border-0 team-member">
+                        <img src="https://via.placeholder.com/200x200?text=Membre+2" class="card-img-top rounded-circle mx-auto mt-3" alt="Photo de l'équipe">
+                        <div class="card-body">
+                            <h4 class="card-title fw-bold mb-1">Chigo Kamgaing Grace</h4>
+                            <p class="card-subtitle text-primary mb-2">Directeur Technique (CTO)</p>
+                            <p class="card-text text-muted">Expert en développement web, John assure la robustesse et la performance de la plateforme.</p>
+                            <div class="social-links mt-3">
+                                <a href="#" class="text-primary me-2"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-primary"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <div class="card h-100 shadow-sm border-0 team-member">
+                        <img src="https://via.placeholder.com/200x200?text=Membre+3" class="card-img-top rounded-circle mx-auto mt-3" alt="Photo de Fatou Camara">
+                        <div class="card-body">
+                            <h4 class="card-title fw-bold mb-1">Feudje Djomo Emeryc</h4>
+                            <p class="card-subtitle text-primary mb-2">Responsable Clientèle</p>
+                            <p class="card-text text-muted">Fatou est le point de contact privilégié pour nos utilisateurs, garantissant une satisfaction maximale.</p>
+                            <div class="social-links mt-3">
+                                <a href="#" class="text-primary me-2"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-primary"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <div class="card h-100 shadow-sm border-0 team-member">
+                        <img src="https://via.placeholder.com/200x200?text=Membre+4" class="card-img-top rounded-circle mx-auto mt-3" alt="Photo de David Eto'o">
+                        <div class="card-body">
+                            <h4 class="card-title fw-bold mb-1">Doungue Djufo Belviane</h4>
+                            <p class="card-subtitle text-primary mb-2">Directeur des Opérations</p>
+                            <p class="card-text text-muted">David gère l'efficacité de nos processus, de la mise en relation à la finalisation des services.</p>
+                            <div class="social-links mt-3">
+                                <a href="#" class="text-primary me-2"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-primary"><i class="fab fa-facebook-f"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-primary text-white text-center">
+        <div class="container">
+            <h2 class="display-5 fw-bold mb-5 text-white">Notre Impact en Chiffres</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-users fa-4x mb-3"></i>
+                        <p class="display-4 fw-bold">1000+</p>
+                        <p class="lead">Techniciens Inscrits</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-handshake fa-4x mb-3"></i>
+                        <p class="display-4 fw-bold">5000+</p>
+                        <p class="lead">Missions Réalisées</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-star fa-4x mb-3"></i>
+                        <p class="display-4 fw-bold">4.8/5</p>
+                        <p class="lead">Satisfaction Moyenne</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light text-center">
+        <div class="container">
+            <h2 class="display-5 fw-bold mb-4">Prêt à Simplifier Votre Quotidien ?</h2>
+            <p class="lead mb-4">Rejoignez la communauté VotreSite dès aujourd'hui et découvrez une nouvelle façon de gérer vos besoins techniques ou de développer votre activité !</p>
+            <a href="inscription_client.php" class="btn btn-primary btn-lg me-3">Trouver un Technicien</a>
+            <a href="inscription_technicien.php" class="btn btn-success btn-lg">Devenir Technicien</a>
+        </div>
+    </section>
+
+    <footer class="footer bg-dark text-white-50 py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <img src="mon logo 3.png" alt="HomeTechnician Logo" style="width: 200px; height: 50px;border-radius: 5px;">
+                    <p>La plateforme qui connecte les clients avec des techniciens qualifiés pour tous leurs besoins de service au Cameroun.</p>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h3 class="text-white mb-3">Liens Utiles</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="a_propos.html" class="text-white-50 text-decoration-none" >À Propos de Nous</a></li>
+                        <li><a href="faq.html" class="text-white-50 text-decoration-none">FAQ</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Mentions Légales</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Politique de Confidentialité</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Conditions Générales</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h3 class="text-white mb-3">Catégories Populaires</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none ">Réparation d'Ordinateur</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none  ">Installation Électrique</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none ">Dépannage Plomberie</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none ">Entretien Climatisation</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h3 class="text-white mb-3">Contactez-nous</h3>
+                    <a href="mailto:andrelkamdem5@gmail.com " style="text-decoration: none;" class="nav-link"><i class="fas fa-envelope me-2 text-success"></i>andrelkamdem5@gmail.com</a>
+                    <p><i class="fas fa-phone me-2 text-success nav-link"></i> +237 654 023 677</p>
+                    <div class="social-links mt-3">
+                        <a href="#" class="text-white-50 me-3 fs-4"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white-50 me-3 fs-4"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white-50 me-3 fs-4"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-white-50 fs-4"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom text-center pt-4 mt-4 border-top border-secondary">
+                <p class="mb-0">&copy; 2025 VotreSite. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script> 
+</body>
+</html>

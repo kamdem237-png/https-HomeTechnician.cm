@@ -1,0 +1,631 @@
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agence de Réparation des Équipements - VotreSite</title>
+    <link rel="icon" type="image/png" href="mon_logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        
+        /* Variables CSS personnalisées */
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-section p.lead {
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        
+
+        .hero-section .div2 input[type="text"] {
+            width: 280px; /* Taille fixe pour les inputs */
+            height: 48px;
+            padding: 0 15px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-section .div2 input[type="submit"] {
+            height: 48px;
+            padding: 0 30px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Sections de contenu générales */
+        section {
+            padding: 4rem 0;
+        }
+
+        section h2 {
+            font-weight: 700;
+            color: var(--bs-dark);
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--bs-primary);
+            border-radius: 2px;
+        }
+
+        .hero-section .div2 {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            display: inline-block; /* Pour que la div s'adapte au contenu */
+        }
+        :root {
+            --bs-primary: #007bff; /* Bleu Bootstrap par défaut */
+            --bs-secondary: #6c757d; /* Gris secondaire */
+            --bs-success: #28a745;
+            --bs-dark: #343a40;
+            --bs-light: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background-color: var(--bs-light);
+            padding-top: 76px; /* Espace pour la navbar fixe */
+        }
+
+        /* Navbar améliorée */
+        .navbar {
+            background-color: var(--bs-dark) !important; /* Fond sombre */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: fixed; /* Rend la navbar fixe en haut */
+            top: 0;
+            width: 100%;
+            z-index: 1030; /* Assure que la barre de navigation est au-dessus de tout */
+        }
+
+        .navbar-collapse {
+            z-index: 1029; /* Le contenu du menu déroulant doit être juste en dessous de la navbar, mais au-dessus des autres éléments de la page */
+            background-color: var(--bs-dark); /* Donne un fond au menu lorsqu'il est ouvert */
+            overflow-y: auto; /* Permet le défilement si le contenu du menu est trop long */
+            max-height: calc(100vh - 76px); /* Ajuste la hauteur maximale pour ne pas dépasser l'écran, 76px est la hauteur estimée de votre navbar */
+        }
+
+        .navbar-brand {
+            padding: 0; /* Supprime le padding par défaut pour l'image */
+        }
+
+        .navbar-brand img {
+            max-width: 200px; /* Taille plus raisonnable pour un logo */
+            height: auto;
+            border-radius: 8px; /* Adoucissement des coins */
+            object-fit: contain; /* Assure que le logo entier est visible */
+        }
+
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.75) !important; /* Couleur de texte claire */
+            font-weight: 500;
+            margin-right: 15px; /* Espacement entre les liens */
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--bs-primary) !important; /* Couleur primaire au survol/actif */
+        }
+
+        /* Styles pour les boutons et menus déroulants de connexion/inscription */
+        .dropdown-toggle {
+            border-radius: 8px; /* Coins arrondis pour les boutons */
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu {
+            border-radius: 8px; /* Coins arrondis pour le menu */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Ombre légère pour le pop-up */
+            border: none; /* Supprime la bordure par défaut */
+            padding: 10px 0; /* Padding interne */
+            min-width: 180px; /* Largeur minimale pour un meilleur look */
+            background-color: var(--bs-light); /* Fond clair pour les menus */
+        }
+
+        .dropdown-item {
+            padding: 10px 20px; /* Plus de padding pour les éléments du menu */
+            font-size: 0.95rem; /* Taille de police légèrement ajustée */
+            color: var(--bs-dark); /* Couleur du texte foncé */
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background-color: var(--bs-primary); /* Fond primaire au survol */
+            color: white; /* Texte blanc au survol */
+            border-radius: 5px; /* Petits coins arrondis pour les éléments survolés */
+            margin: 0 8px; /* Espace sur les côtés pour l'effet de coin arrondi */
+        }
+
+        /* Styles spécifiques pour le bouton d'inscription */
+        .btn-primary.dropdown-toggle {
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+        }
+        .btn-primary.dropdown-toggle:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        /* Styles pour le bouton de connexion (outline) */
+        .btn-outline-primary.dropdown-toggle {
+            color: var(--bs-primary);
+            border-color: var(--bs-primary);
+            background-color: transparent;
+        }
+        .btn-outline-primary.dropdown-toggle:hover {
+            background-color: var(--bs-primary);
+            color: white;
+        }
+
+        /* Ajustement pour les icônes Font Awesome */
+        .dropdown-item i {
+            margin-right: 8px; /* Espace entre l'icône et le texte */
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(0, 123, 255, 0.8), rgba(0, 86, 179, 0.8)), url('hero-background.jpg') no-repeat center center/cover; /* Remplacez 'hero-background.jpg' par votre image de fond */
+            min-height: 550px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            color: white;
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .hero-section p.lead {
+            font-size: 1.5rem;
+            margin-bottom: 2.5rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Sections de contenu générales */
+        section {
+            padding: 4rem 0;
+        }
+
+        section h2 {
+            font-weight: 700;
+            color: var(--bs-dark);
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--bs-primary);
+            border-radius: 2px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-title {
+            color: var(--bs-primary);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* How It Works Section */
+        #how-it-works .icon-circle {
+            background-color: var(--bs-light);
+            border: 2px solid var(--bs-primary);
+            color: var(--bs-primary);
+            font-size: 3rem;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        #how-it-works .icon-circle:hover {
+            background-color: var(--bs-primary);
+            color: white;
+        }
+
+        #how-it-works h4 {
+            color: var(--bs-primary);
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        /* Contact Form */
+        #contact-section .form-control,
+        #contact-section .form-control:focus {
+            border-radius: 8px;
+            border-color: #ddd;
+            box-shadow: none;
+        }
+        #contact-section .form-control:focus {
+            border-color: var(--bs-primary);
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--bs-dark) !important;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer h3 {
+            color: white;
+            font-weight: 600;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.6);
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .footer .social-links a {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.5rem;
+            margin-right: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-links a:hover {
+            color: var(--bs-success); /* Vert pour les icônes sociales au survol */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 shadow-sm fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="site de mise en relation techniciens&clients.html">
+                    <img src="mon logo 3.png" alt="HomeTechnician Logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">Accueil</a></li>
+                        <li class="nav-item"><a class="nav-link" href="a_propos.html">À propos de nous</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#nos_services">Nos services</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#techniciens">je suis un technicien</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact-section">Contact</a></li>
+                    </ul>
+                    <div class="d-flex ms-lg-3">
+                        <div class="dropdown me-6">
+                            <a href="connexion_client.php" class="btn btn-outline-primary">
+                                Connexion
+                            </a>
+                            
+                            <a href="inscription_client.php" class="btn btn-primary">
+                                Inscription
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="container text-center">
+                <h1 class="display-3">Votre Solution de Dépannage Rapide et Fiable</h1>
+                <p class="lead">Connectez-vous avec des techniciens qualifiés pour tous vos besoins de réparation à travers le Cameroun.</p>
+                <div class="div2">
+                    <form method="post" action="traitement.php" class="d-flex flex-column flex-md-row align-items-center justify-content-center">
+                        <input type="text" name="specialite" placeholder="Spécialité du technicien (Ex: électricité)" id="specialite" required class="form-control me-md-2 mb-2 mb-md-0">
+                        <input type="text" name="zone" placeholder="Votre zone (Ex: Douala, Akwa)" id="zone" required class="form-control me-md-2 mb-2 mb-md-0">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-search me-2"></i>Rechercher un technicien
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="clients" class="py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-4">Vous avez besoin d'un technicien ?</h2>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-bolt fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">Service Rapide</h5>
+                                <p class="card-text">Obtenez une intervention rapide pour vos pannes ou installations urgentes.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-medal fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">Techniciens Qualifiés</h5>
+                                <p class="card-text">Nous mettons à votre disposition des professionnels vérifiés et expérimentés.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-hand-holding-usd fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">Devis Gratuits</h5>
+                                <p class="card-text">Demandez plusieurs devis et choisissez l'offre qui vous convient le mieux.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-5">
+                    <a href="inscription_client.php" class="btn btn-primary btn-lg px-5 py-3">Trouver un technicien maintenant</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="nos_services" class="py-5 bg-white">
+            <div class="container text-center">
+                <h2>Nos Services</h2>
+                <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+                    <div class="col">
+                        <div class="card h-100 p-4">
+                            <div class="card-body">
+                                <i class="fas fa-desktop fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">Réparation Informatique</h5>
+                                <p class="card-text">Dépannage de PC, Mac, récupération de données, suppression de virus.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 p-4">
+                            <div class="card-body">
+                                <i class="fas fa-plug fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">Électricité Générale</h5>
+                                <p class="card-text">Installations électriques, dépannages, mises aux normes, pannes de courant.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 p-4">
+                            <div class="card-body">
+                                <i class="fas fa-wrench fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">Plomberie</h5>
+                                <p class="card-text">Réparation de fuites, débouchage de canalisations, installation de sanitaires.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 p-4">
+                            <div class="card-body">
+                                <i class="fas fa-snowflake fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">Climatisation</h5>
+                                <p class="card-text">Installation, maintenance, réparation de systèmes de climatisation.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 p-4">
+                            <div class="card-body">
+                                <i class="fas fa-camera-retro fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">Électronique</h5>
+                                <p class="card-text">Réparation de téléviseurs, systèmes audio, petits électroménagers.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100 p-4">
+                            <div class="card-body">
+                                <i class="fas fa-robot fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">Autres Dépannages</h5>
+                                <p class="card-text">Contactez-nous pour d'autres types de services techniques spécifiques.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="techniciens" class="py-5">
+            <div class="container">
+                <h2 class="text-center mb-4">Vous êtes technicien ? Rejoignez-nous !</h2>
+                    <div class="row g-4">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                                    <h5 class="card-title">Nouvelles Opportunités</h5>
+                                    <p class="card-text">Accédez à une clientèle prête à vous engager pour vos services.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-cogs fa-3x text-primary mb-3"></i>
+                                    <h5 class="card-title">Gestion Simplifiée</h5>
+                                    <p class="card-text">Gérez vos demandes, devis et plannings directement depuis notre plateforme.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-bullhorn fa-3x text-primary mb-3"></i>
+                                    <h5 class="card-title">Visibilité Accrue</h5>
+                                    <p class="card-text">Mettez en avant votre expertise et développez votre activité.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-5">
+                        <a href="inscription_technicien.php" class="btn btn-outline-primary btn-lg px-5 py-3">Inscrivez-vous comme technicien</a>
+                    </div>
+                </div>
+        </section>
+
+        <section id="how-it-works" class="py-5 bg-light">
+            <div class="container text-center">
+                <h2>Comment ça marche ?</h2>
+                <div class="row text-center mt-5">
+                    <div class="col-md-4 mb-4">
+                        <div class="icon-circle border border-primary rounded-circle mx-auto d-flex align-items-center justify-content-center">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h4 class="mt-3">1. Inscrivez-vous</h4>
+                        <p>Créez un compte client pour poster vos demandes ou un compte technicien pour proposer vos services.</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="icon-circle border border-primary rounded-circle mx-auto d-flex align-items-center justify-content-center">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h4 class="mt-3">2. Trouvez ou Proposez</h4>
+                        <p>Clients : Décrivez votre problème et trouvez le technicien idéal. Techniciens : Parcourez les demandes et postulez.</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="icon-circle border border-primary rounded-circle mx-auto d-flex align-items-center justify-content-center">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h4 class="mt-3">3. Service Réalisé</h4>
+                        <p>Connectez-vous, échangez, et une fois le service rendu, évaluez l'expérience.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact-section" class="py-5">
+            <div class="container">
+                    <h2 class="text-center mb-4">Contactez-nous</h2>
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                        <form action="contact_admin.php" method="POST"> <div class="mb-3">
+                            <label for="nom" class="form-label">Nom Complet</label>
+                            <input type="text" class="form-control" id="nom" name="nom" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Adresse Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sujet" class="form-label">Sujet</label>
+                                <input type="text" class="form-control" id="sujet" name="sujet">
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Votre Message</label>
+                                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg">Envoyer le Message</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+   <footer class="footer bg-dark text-white-50 py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <img src="mon logo 3.png" alt="HomeTechnician Logo" style="width: 200px; height: 50px;border-radius: 5px;">
+                    <p>La plateforme qui connecte les clients avec des techniciens qualifiés pour tous leurs besoins de service au Cameroun.</p>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h3 class="text-white mb-3">Liens Utiles</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="a_propos.html" class="text-white-50 text-decoration-none" >À Propos de Nous</a></li>
+                        <li><a href="faq.html" class="text-white-50 text-decoration-none">FAQ</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Mentions Légales</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Politique de Confidentialité</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Conditions Générales</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h3 class="text-white mb-3">Catégories Populaires</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none ">Réparation d'Ordinateur</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none  ">Installation Électrique</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none ">Dépannage Plomberie</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none ">Entretien Climatisation</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h3 class="text-white mb-3">Contactez-nous</h3>
+                    <a href="mailto:andrelkamdem5@gmail.com " style="text-decoration: none;" class="nav-link"><i class="fas fa-envelope me-2 text-success"></i>andrelkamdem5@gmail.com</a>
+                    <p><i class="fas fa-phone me-2 text-success nav-link"></i> +237 654 023 677</p>
+                    <div class="social-links mt-3">
+                        <a href="#" class="text-white-50 me-3 fs-4"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white-50 me-3 fs-4"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white-50 me-3 fs-4"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-white-50 fs-4"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom text-center pt-4 mt-4 border-top border-secondary">
+                <p class="mb-0">&copy; 2025 VotreSite. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
